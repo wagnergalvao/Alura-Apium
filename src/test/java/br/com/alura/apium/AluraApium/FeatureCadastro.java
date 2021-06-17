@@ -10,6 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import com.github.javafaker.Faker;
 
 import br.com.alura.apium.AluraApium.PageObjects.CadastroPageObject;
+import br.com.alura.apium.AluraApium.PageObjects.LoginPageObject;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 
@@ -20,14 +21,12 @@ public class FeatureCadastro {
 		Faker fake = new Faker(new Locale("pt-BR"));
 		AppiumDriver driver = AppiumDriverConfig.Instance().driver;
 
-		MobileElement botaoCadastro = (MobileElement) driver
-				.findElementById("br.com.alura.aluraesporte:id/login_botao_cadastrar_usuario");
-		botaoCadastro.click();
+		LoginPageObject telaLogin = new LoginPageObject(driver);
+		telaLogin.BuscarElementos();
 
-		CadastroPageObject telaCadastro = new CadastroPageObject(driver);
+		CadastroPageObject telaCadastro = telaLogin.CadastrarUsuario();
 		telaCadastro.BuscarElementos();
-		telaCadastro.Cadastrar(fake.name().username(), fake.internet().password(),
-				fake.internet().password());
+		telaCadastro.Cadastrar(fake.name().username(), fake.internet().password(), fake.internet().password());
 
 		assertEquals("Senhas não conferem", telaCadastro.MensagemErro());
 
@@ -40,18 +39,15 @@ public class FeatureCadastro {
 		String _password = fake.internet().password();
 		AppiumDriver driver = AppiumDriverConfig.Instance().driver;
 
-		MobileElement botaoCadastro = (MobileElement) driver
-				.findElementById("br.com.alura.aluraesporte:id/login_botao_cadastrar_usuario");
-		botaoCadastro.click();
-		
-		CadastroPageObject telaCadastro = new CadastroPageObject(driver);
+		LoginPageObject telaLogin = new LoginPageObject(driver);
+		telaLogin.BuscarElementos();
+
+		CadastroPageObject telaCadastro = telaLogin.CadastrarUsuario();
 		telaCadastro.BuscarElementos();
-		telaCadastro.Cadastrar(fake.name().username(), _password, _password);
+		telaLogin = telaCadastro.Cadastrar(fake.name().username(), _password, _password);
+		telaLogin.BuscarElementos();
 
-		MobileElement botaoLogar = (MobileElement) driver
-				.findElementById("br.com.alura.aluraesporte:id/login_botao_logar");
-
-		assertEquals("LOGAR", botaoLogar.getText());
+		assertEquals("LOGAR", telaLogin.TextoBotaoLogar());
 
 	}
 }

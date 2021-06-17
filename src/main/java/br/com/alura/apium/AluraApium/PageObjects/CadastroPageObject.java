@@ -37,9 +37,10 @@ public class CadastroPageObject {
 
 	}
 
-	public void Cadastrar(String nome, String senha, String confirmaSenha) {
+	public LoginPageObject Cadastrar(String nome, String senha, String confirmaSenha) {
 		PreencherFormulario(nome, senha, confirmaSenha);
 		botaoCadastrar.click();
+		return new LoginPageObject(driver);
 	}
 
 	public String MensagemErro() {
